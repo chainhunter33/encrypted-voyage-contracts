@@ -5,11 +5,12 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEncryptedVoyageContract, useVoyageList } from '@/hooks/useContract';
 import { useAccount } from 'wagmi';
-import { Ship, Package, MapPin, Clock } from 'lucide-react';
+import { Ship, Package, MapPin, Clock, Anchor, Compass } from 'lucide-react';
+import { FHEEncryption, EncryptedDataUtils } from '@/lib/fhe-utils';
 
 export function ContractInteraction() {
   const { address, isConnected } = useAccount();
-  const { createVoyage, updateVoyageStatus, completeVoyage } = useEncryptedVoyageContract();
+  const { createVoyage, updateVoyageStatus, completeVoyage, addEncryptedCargo, updateEncryptedTracking } = useEncryptedVoyageContract();
   const { data: voyages, isLoading } = useVoyageList();
   
   const [formData, setFormData] = useState({
@@ -21,12 +22,139 @@ export function ContractInteraction() {
     arrivalTime: '',
   });
 
+  const [cargoData, setCargoData] = useState({
+    weight: '',
+    value: '',
+    temperature: '',
+    humidity: '',
+    securityLevel: '',
+    isHazardous: false,
+    isFragile: false,
+    description: '',
+  });
+
+  const [trackingData, setTrackingData] = useState({
+    latitude: '',
+    longitude: '',
+    speed: '',
+    heading: '',
+    fuelLevel: '',
+    temperature: '',
+  });
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleCargoInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setCargoData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleTrackingInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setTrackingData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleAddEncryptedCargo = async (voyageId: number) => {
+    if (!isConnected) return;
+
+    try {
+      // Encrypt cargo data using FHE
+      const encryptedCargoData = FHEEncryption.encryptCargoData({
+        weight: parseFloat(cargoData.weight),
+        value: parseFloat(cargoData.value),
+        temperature: parseFloat(cargoData.temperature),
+        humidity: parseFloat(cargoData.humidity),
+        securityLevel: parseFloat(cargoData.securityLevel),
+      });
+
+      // Prepare encrypted data for contract call
+      const encryptedData = {
+        weight: encryptedCargoData.weight.encryptedValue,
+        value: encryptedCargoData.value.encryptedValue,
+        temperature: encryptedCargoData.temperature.encryptedValue,
+        humidity: encryptedCargoData.humidity.encryptedValue,
+        securityLevel: encryptedCargoData.securityLevel.encryptedValue,
+      };
+
+      const proof = encryptedCargoData.weight.proof; // Use first proof for simplicity
+
+      await addEncryptedCargo(
+        voyageId,
+        encryptedData,
+        cargoData.isHazardous,
+        cargoData.isFragile,
+        cargoData.description,
+        proof
+      );
+
+      // Reset cargo form
+      setCargoData({
+        weight: '',
+        value: '',
+        temperature: '',
+        humidity: '',
+        securityLevel: '',
+        isHazardous: false,
+        isFragile: false,
+        description: '',
+      });
+    } catch (error) {
+      console.error('Error adding encrypted cargo:', error);
+    }
+  };
+
+  const handleUpdateEncryptedTracking = async (voyageId: number) => {
+    if (!isConnected) return;
+
+    try {
+      // Encrypt tracking data using FHE
+      const encryptedTrackingData = FHEEncryption.encryptTrackingData({
+        latitude: parseFloat(trackingData.latitude),
+        longitude: parseFloat(trackingData.longitude),
+        speed: parseFloat(trackingData.speed),
+        heading: parseFloat(trackingData.heading),
+        fuelLevel: parseFloat(trackingData.fuelLevel),
+        temperature: parseFloat(trackingData.temperature),
+      });
+
+      // Prepare encrypted data for contract call
+      const encryptedData = {
+        latitude: encryptedTrackingData.latitude.encryptedValue,
+        longitude: encryptedTrackingData.longitude.encryptedValue,
+        speed: encryptedTrackingData.speed.encryptedValue,
+        heading: encryptedTrackingData.heading.encryptedValue,
+        fuelLevel: encryptedTrackingData.fuelLevel.encryptedValue,
+        temperature: encryptedTrackingData.temperature.encryptedValue,
+      };
+
+      const proof = encryptedTrackingData.latitude.proof; // Use first proof for simplicity
+
+      await updateEncryptedTracking(voyageId, encryptedData, proof);
+
+      // Reset tracking form
+      setTrackingData({
+        latitude: '',
+        longitude: '',
+        speed: '',
+        heading: '',
+        fuelLevel: '',
+        temperature: '',
+      });
+    } catch (error) {
+      console.error('Error updating encrypted tracking:', error);
+    }
   };
 
   const handleCreateVoyage = async (e: React.FormEvent) => {
@@ -199,10 +327,10 @@ export function ContractInteraction() {
               {voyages?.map((voyage: any) => (
                 <div key={voyage.id} className="border rounded-lg p-4 space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Ship className="h-4 w-4 text-primary" />
-                      <span className="font-medium">{voyage.vesselName}</span>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <Anchor className="h-4 w-4 text-primary" />
+                    <span className="font-medium">{voyage.vesselName}</span>
+                  </div>
                     <span className={`px-2 py-1 rounded-full text-xs ${
                       voyage.status === 'In Transit' 
                         ? 'bg-blue-100 text-blue-800' 
@@ -216,7 +344,7 @@ export function ContractInteraction() {
                   <p className="text-sm text-muted-foreground">{voyage.cargoDescription}</p>
                   <div className="flex items-center gap-4 text-xs text-muted-foreground">
                     <div className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
+                      <Compass className="h-3 w-3" />
                       {new Date(voyage.createdAt).toLocaleDateString()}
                     </div>
                   </div>

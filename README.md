@@ -1,118 +1,262 @@
-# Encrypted Voyage Contracts
+# 🌊 Encrypted Voyage Contracts
 
-A decentralized application for secure maritime tracking and logistics management using Fully Homomorphic Encryption (FHE).
+> **Revolutionary Maritime Logistics with Fully Homomorphic Encryption**
 
-## Project Overview
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 
-This project provides a comprehensive solution for maritime logistics with privacy-preserving features through FHE encryption. It enables secure tracking of cargo, vessels, and logistics data while maintaining confidentiality of sensitive information.
+## 🚢 Overview
 
-## Features
+**Encrypted Voyage Contracts** is a cutting-edge decentralized application that revolutionizes maritime logistics through the power of Fully Homomorphic Encryption (FHE). Built for the modern shipping industry, it enables secure, privacy-preserving cargo tracking and logistics management while maintaining complete data confidentiality.
 
-- **Secure Maritime Tracking**: Real-time vessel and cargo tracking with encrypted data
-- **FHE Encryption**: Fully homomorphic encryption for sensitive logistics data
-- **Decentralized Architecture**: Built on blockchain for transparency and security
-- **Privacy-Preserving Analytics**: Analyze logistics data without exposing sensitive information
-- **Multi-Chain Support**: Compatible with various blockchain networks
+### ✨ Key Features
 
-## Technologies Used
+- 🔐 **FHE-Encrypted Data Processing** - Process sensitive logistics data without exposing it
+- 🚢 **Real-time Vessel Tracking** - Secure tracking with encrypted location data
+- 📦 **Smart Cargo Management** - Encrypted cargo information and status updates
+- 🛡️ **Privacy-Preserving Analytics** - Analyze logistics patterns without compromising data
+- 🌐 **Multi-Chain Support** - Compatible with Ethereum and other EVM chains
+- 💼 **Insurance Integration** - Encrypted insurance claims and damage assessments
+- ⭐ **Reputation System** - Trust scoring for vessels and operators
 
-- **Frontend**: React, TypeScript, Vite
-- **UI Components**: shadcn/ui, Tailwind CSS
-- **Blockchain**: Solidity, FHEVM
-- **Encryption**: Fully Homomorphic Encryption (FHE)
-- **State Management**: React Query, React Hooks
+## 🏗️ Architecture
 
-## Getting Started
+```mermaid
+graph TB
+    A[Frontend React App] --> B[Rainbow Kit Wallet]
+    A --> C[Contract Interaction Layer]
+    C --> D[EncryptedVoyage.sol]
+    D --> E[FHE Encryption Layer]
+    E --> F[Sepolia Testnet]
+    
+    G[Vessel Tracking] --> D
+    H[Cargo Management] --> D
+    I[Insurance Claims] --> D
+    J[Analytics Dashboard] --> D
+```
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **React 18** - Modern UI framework
+- **TypeScript** - Type-safe development
+- **Vite** - Lightning-fast build tool
+- **Tailwind CSS** - Utility-first styling
+- **shadcn/ui** - Beautiful component library
+
+### Blockchain & Encryption
+- **Solidity** - Smart contract development
+- **FHEVM** - Fully Homomorphic Encryption
+- **Wagmi** - React hooks for Ethereum
+- **Rainbow Kit** - Wallet connection framework
+- **Viem** - TypeScript interface for Ethereum
+
+### Infrastructure
+- **Sepolia Testnet** - Ethereum test network
+- **Vercel** - Deployment platform
+- **GitHub Actions** - CI/CD pipeline
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
+- Node.js 18+ 
 - npm or yarn
 - Git
+- MetaMask or compatible wallet
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/chainhunter33/encrypted-voyage-contracts.git
-cd encrypted-voyage-contracts
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/chainhunter33/encrypted-voyage-contracts.git
+   cd encrypted-voyage-contracts
+   ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-3. Set up environment variables:
-```bash
-cp .env.example .env
-# Edit .env with your configuration
-```
+3. **Configure environment**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
 
-4. Start the development server:
-```bash
-npm run dev
-```
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
 
-## Environment Configuration
+## ⚙️ Configuration
 
-Create a `.env` file with the following variables:
+### Environment Variables
+
+Create a `.env` file with the following configuration:
 
 ```env
-NEXT_PUBLIC_CHAIN_ID=11155111
-NEXT_PUBLIC_RPC_URL=https://sepolia.infura.io/v3/b18fb7e6ca7045ac83c41157ab93f990
-NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=2ec9743d0d0cd7fb94dee1a7e6d33475
-NEXT_PUBLIC_INFURA_API_KEY=b18fb7e6ca7045ac83c41157ab93f990
-NEXT_PUBLIC_RPC_URL=https://1rpc.io/sepolia
+# Network Configuration
+VITE_CHAIN_ID=11155111
+VITE_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY
+VITE_WALLET_CONNECT_PROJECT_ID=YOUR_PROJECT_ID
+
+# Contract Address (deploy first)
+VITE_CONTRACT_ADDRESS=0x...
+
+# FHE Configuration
+VITE_FHE_NETWORK_URL=https://api.zama.ai
+VITE_FHE_APP_ID=your_app_id
 ```
 
-## Smart Contracts
+### Smart Contract Deployment
 
-The project includes FHE-enabled smart contracts for:
-- Vessel registration and tracking
-- Cargo management with encrypted data
-- Logistics coordination
-- Privacy-preserving analytics
+1. **Compile contracts**
+   ```bash
+   npx hardhat compile
+   ```
 
-## Development
+2. **Deploy to Sepolia**
+   ```bash
+   npx hardhat run scripts/deploy.js --network sepolia
+   ```
 
-### Building the Project
+3. **Update contract address**
+   ```bash
+   # Update VITE_CONTRACT_ADDRESS in .env
+   ```
 
+## 📱 Usage
+
+### Creating a Voyage
+
+1. **Connect Wallet** - Use Rainbow Kit to connect your wallet
+2. **Create Voyage** - Fill in vessel and cargo details
+3. **Encrypt Data** - Sensitive information is automatically encrypted
+4. **Track Progress** - Monitor voyage status in real-time
+
+### Managing Cargo
+
+- **Add Cargo** - Register cargo with encrypted weight/value data
+- **Update Status** - Track cargo condition and location
+- **Generate Reports** - Create encrypted analytics reports
+
+### Insurance Claims
+
+- **Submit Claims** - File encrypted insurance claims
+- **Damage Assessment** - Encrypted damage evaluation
+- **Approval Process** - Secure claim verification
+
+## 🔒 Security Features
+
+### FHE Encryption
+- **Zero-Knowledge Processing** - Compute on encrypted data
+- **Privacy-Preserving Analytics** - Analyze without exposing data
+- **Secure Multi-Party Computation** - Collaborative analysis
+
+### Smart Contract Security
+- **Access Control** - Role-based permissions
+- **Data Validation** - Input sanitization and verification
+- **Audit Trail** - Immutable transaction history
+
+## 🧪 Testing
+
+### Run Tests
 ```bash
-npm run build
-```
-
-### Running Tests
-
-```bash
+# Unit tests
 npm run test
+
+# Contract tests
+npx hardhat test
+
+# E2E tests
+npm run test:e2e
 ```
 
-### Linting
-
+### Test Coverage
 ```bash
-npm run lint
+npm run test:coverage
 ```
 
-## Deployment
+## 📦 Deployment
 
-The application can be deployed to various platforms:
+### Vercel Deployment
 
-1. **Vercel**: Connect your GitHub repository to Vercel for automatic deployments
-2. **Netlify**: Use the build command `npm run build` and publish directory `dist`
-3. **Self-hosted**: Deploy the built files to any web server
+1. **Connect Repository**
+   - Import project in Vercel dashboard
+   - Configure build settings
 
-## Contributing
+2. **Set Environment Variables**
+   - Add all required environment variables
+   - Configure for production environment
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+3. **Deploy**
+   - Automatic deployment on push to main
+   - Manual deployment available
 
-## License
+### Custom Domain
+- Configure DNS settings
+- SSL certificate automatically provided
+- HTTPS enabled by default
 
-This project is licensed under the MIT License.
+## 🤝 Contributing
 
-## Support
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-For support and questions, please open an issue in the GitHub repository.
+### Development Workflow
+
+1. **Fork Repository**
+2. **Create Feature Branch**
+3. **Make Changes**
+4. **Add Tests**
+5. **Submit Pull Request**
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- **Documentation** - [docs.encryptedvoyage.com](https://docs.encryptedvoyage.com)
+- **Issues** - [GitHub Issues](https://github.com/chainhunter33/encrypted-voyage-contracts/issues)
+- **Discord** - [Community Discord](https://discord.gg/encryptedvoyage)
+- **Email** - support@encryptedvoyage.com
+
+## 🗺️ Roadmap
+
+### Phase 1 - Core Features ✅
+- [x] FHE-encrypted smart contracts
+- [x] Wallet integration
+- [x] Basic cargo tracking
+- [x] Insurance claims
+
+### Phase 2 - Advanced Features 🚧
+- [ ] Multi-chain support
+- [ ] Advanced analytics
+- [ ] Mobile application
+- [ ] API integration
+
+### Phase 3 - Enterprise 🎯
+- [ ] Enterprise dashboard
+- [ ] Custom integrations
+- [ ] Advanced security features
+- [ ] Compliance tools
+
+## 🙏 Acknowledgments
+
+- **Zama** - FHE technology and support
+- **Rainbow** - Wallet connection framework
+- **Vercel** - Deployment platform
+- **OpenZeppelin** - Security standards
+
+---
+
+<div align="center">
+
+**Built with ❤️ by the Encrypted Voyage Team**
+
+[Website](https://encryptedvoyage.com) • [Documentation](https://docs.encryptedvoyage.com) • [Twitter](https://twitter.com/encryptedvoyage)
+
+</div>

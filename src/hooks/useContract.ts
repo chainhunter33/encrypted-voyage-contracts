@@ -18,6 +18,40 @@ const ENCRYPTED_VOYAGE_ABI = [
     "type": "function"
   },
   {
+    "inputs": [
+      {"internalType": "uint256", "name": "voyageId", "type": "uint256"},
+      {"internalType": "bytes", "name": "encryptedWeight", "type": "bytes"},
+      {"internalType": "bytes", "name": "encryptedValue", "type": "bytes"},
+      {"internalType": "bytes", "name": "encryptedTemperature", "type": "bytes"},
+      {"internalType": "bytes", "name": "encryptedHumidity", "type": "bytes"},
+      {"internalType": "bytes", "name": "encryptedSecurityLevel", "type": "bytes"},
+      {"internalType": "bool", "name": "isHazardous", "type": "bool"},
+      {"internalType": "bool", "name": "isFragile", "type": "bool"},
+      {"internalType": "string", "name": "description", "type": "string"},
+      {"internalType": "bytes", "name": "inputProof", "type": "bytes"}
+    ],
+    "name": "addCargo",
+    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"internalType": "uint256", "name": "voyageId", "type": "uint256"},
+      {"internalType": "bytes", "name": "encryptedLatitude", "type": "bytes"},
+      {"internalType": "bytes", "name": "encryptedLongitude", "type": "bytes"},
+      {"internalType": "bytes", "name": "encryptedSpeed", "type": "bytes"},
+      {"internalType": "bytes", "name": "encryptedHeading", "type": "bytes"},
+      {"internalType": "bytes", "name": "encryptedFuelLevel", "type": "bytes"},
+      {"internalType": "bytes", "name": "encryptedTemperature", "type": "bytes"},
+      {"internalType": "bytes", "name": "inputProof", "type": "bytes"}
+    ],
+    "name": "updateTracking",
+    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [{"internalType": "uint256", "name": "voyageId", "type": "uint256"}],
     "name": "getVoyageInfo",
     "outputs": [
@@ -89,10 +123,74 @@ export function useEncryptedVoyageContract() {
     });
   };
 
+  const addEncryptedCargo = async (
+    voyageId: number,
+    encryptedData: {
+      weight: string;
+      value: string;
+      temperature: string;
+      humidity: string;
+      securityLevel: string;
+    },
+    isHazardous: boolean,
+    isFragile: boolean,
+    description: string,
+    proof: string
+  ) => {
+    return writeContract({
+      address: CONTRACT_ADDRESS as `0x${string}`,
+      abi: ENCRYPTED_VOYAGE_ABI,
+      functionName: 'addCargo',
+      args: [
+        voyageId,
+        encryptedData.weight,
+        encryptedData.value,
+        encryptedData.temperature,
+        encryptedData.humidity,
+        encryptedData.securityLevel,
+        isHazardous,
+        isFragile,
+        description,
+        proof
+      ],
+    });
+  };
+
+  const updateEncryptedTracking = async (
+    voyageId: number,
+    encryptedData: {
+      latitude: string;
+      longitude: string;
+      speed: string;
+      heading: string;
+      fuelLevel: string;
+      temperature: string;
+    },
+    proof: string
+  ) => {
+    return writeContract({
+      address: CONTRACT_ADDRESS as `0x${string}`,
+      abi: ENCRYPTED_VOYAGE_ABI,
+      functionName: 'updateTracking',
+      args: [
+        voyageId,
+        encryptedData.latitude,
+        encryptedData.longitude,
+        encryptedData.speed,
+        encryptedData.heading,
+        encryptedData.fuelLevel,
+        encryptedData.temperature,
+        proof
+      ],
+    });
+  };
+
   return {
     createVoyage,
     updateVoyageStatus,
     completeVoyage,
+    addEncryptedCargo,
+    updateEncryptedTracking,
     contractAddress: CONTRACT_ADDRESS,
   };
 }
